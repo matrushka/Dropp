@@ -1,3 +1,12 @@
+/*
+ * Dropp
+ * http://github.com/matrushka/Dropp
+ * @requires jQuery v1.3 or later
+ * 
+ * Dropp is a jQuery plugin which replaces regular droprown menus ( <select> elements ) with stylable alternatives.
+ *
+ * 2010 - Baris Gumustas
+ */
 (function($){
 	$.fn.dropp = function() {
 		return this.each(function() {
