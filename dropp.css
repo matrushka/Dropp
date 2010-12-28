@@ -1,0 +1,10 @@
+ul.dropdown_list,
+ul.dropdown_list li { margin: 0; padding: 0; list-style: none; }
+ div.dropdown,
+ ul.dropdown_list li a { font: 13px; font-weight: normal; color: #000; padding: 3px 5px; text-align: left; display: block; }
+ 
+div.dropdown { border: 2px solid #ccc; cursor: pointer; outline:0;}
+
+ul.dropdown_list { border: 2px solid black;margin-top:-2px; }
+ ul.dropdown_list li a { text-decoration: none; background: #fff; color: black; }
+ ul.dropdown_list li a:hover { background: #e2e2e2; }
