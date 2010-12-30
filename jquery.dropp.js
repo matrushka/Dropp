@@ -14,16 +14,17 @@
 			select.hide();
 			select.wrap('<div class="dropdown_wrapper"></div>');
 			
-			var dropdown = $('<div/>').attr('class', select.attr('class')).addClass('dropdown').appendTo(select.parent());
+			var dropdown = $('<a href="#"/>').attr('class', select.attr('class')).addClass('dropdown').appendTo(select.parent());
 			var list = $('<ul/>').addClass('dropdown_list').hide().appendTo(select.parent());
 			
+			// duplicate this line for dropdown opening
 			list.css('min-width', dropdown.width()+parseInt(dropdown.css("padding-left"), 10)+parseInt(dropdown.css("padding-right"), 10));
 			list.css('position', 'absolute').css('z-index', '9999');
 			
 			select.find('option').each(function() {
-				var list = $(this).closest('.dropdown_wrapper').find('ul.dropdown_list');
-				var list_item = $('<li/>').appendTo(list);
 				var item = $(this);
+				var list = item.closest('.dropdown_wrapper').find('ul.dropdown_list');
+				var list_item = $('<li/>').appendTo(list);
 				var link = $('<a href="#"/>').text(item.text());
 				link.data('option',item);
 				list_item.append(link);
@@ -104,12 +105,13 @@
 			}
 			
 			dropdown.click(function() {
-				$('ul.dropdown_list').hide();
 				if (list.is(':visible')) {
 						list.hide();
+						$('ul.dropdown_list').hide();
 				} else {
 						list.show();
 				}
+				return false;
 			});
 			
 			$(document).click(function() {
