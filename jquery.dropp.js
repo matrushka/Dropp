@@ -66,7 +66,7 @@
 							if (typeof select.attr('placeholder') !== 'undefined') {
 								dropdown.text(select.attr('placeholder'));
 							} else {
-								dropdown.text(' ');
+								dropdown.html('&nbsp;');
 							}
 						} else {
 							dropdown.text(values.join(', '));
@@ -89,7 +89,7 @@
 				if (typeof select.attr('placeholder') !== 'undefined') {
 					dropdown.text(select.attr('placeholder'));
 				} else {
-					dropdown.text(' ');
+					dropdown.html('&nbsp;');
 				}
 			} else {
 				if (typeof select.attr('multiple') !== undefined && (select.attr('multiple') === true || select.attr('multiple') == 'multiple')) {
