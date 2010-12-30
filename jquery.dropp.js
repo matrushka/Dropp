@@ -109,6 +109,7 @@
 						list.hide();
 						$('ul.dropdown_list').hide();
 				} else {
+					$('ul.dropdown_list').hide();
 						list.show();
 				}
 				return false;
