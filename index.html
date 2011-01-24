@@ -12,13 +12,16 @@
 	<style type="text/css">
 		html,body { font-family: 'Droid Sans', arial, serif; font-size:13px;}
 		h1 { font-family: 'Raleway', arial, serif; font-size:32px; font-weight:100; margin:1% 0 1% 0;}
-		.cont_50 { width:48%; margin:0 1% 0 1%; float:left; }
-		.cont_100 { width:98%; margin:0 1% 0 1%; float:left; }
-		.cont_33 { width:31%; margin:0 1% 0 1%; float:left; }
+		.cont_50 { width:48%; margin:0 1% 2% 1%; float:left; }
+		.cont_100 { width:98%; margin:0 1% 2% 1%; float:left; }
+		.cont_33 { width:31%; margin:0 1% 2% 1%; float:left; }
 		/* http://sonspring.com/journal/clearing-floats */
 		.clear { clear: both; display: block; overflow: hidden; visibility: hidden; width: 0; height: 0; }
 		code {padding:4px; border: 1px solid #e2e2e2;margin:0 0 10px 0;display:block;}
 		p {margin:0 0 10px 0;}
+		h2 {margin:0 0 0.5% 0; font-size: 24px;}
+		h3 {margin:0 0 0.5% 0; font-size: 16px;}
+		span.code {font-family:monospace}
 	</style>
 </head>
 <body>
@@ -26,6 +29,7 @@
 		<h1>jQuery Dropdown Replacement</h1>
 	</div>
 	<div class="cont_100">
+		<h2>Introduction</h2>
 		<p>
 			Dropp is a jQuery plugin which replaces regular droprown menus ( &lt;select&gt; elements ) with stylable alternatives.
 		</p>
@@ -40,8 +44,96 @@
 		</p>
 	</div>
 	<div class="clear">&nbsp;</div>
+	<div class="cont_100">
+		<h2>Settings</h2>
+		<p>You can specify settings by attaching them to initializer. See below for example:</p>
+		<code>
+			$('select').dropp({
+				'phrase_on_multiple' : 'Multiple Choices',
+				'class_dropdown_wrapper' : 'my_custom_dropdown_wrapper'
+			});
+		</code>
+	</div>
+	<div class="clear">&nbsp;</div>
 	<div class="cont_50">
-		<select name="" id="">
+		<h3>Setting: "phrase_on_multiple"</h3>
+		<p>
+			Prints the specified text in multiple choice select elements when there are multiple choices selected.
+		</p>
+		<p>
+			Default is <span class="code">false</span>
+		</p>
+		<code>
+			$('select').dropp({
+				'phrase_on_multiple' : 'Multiple Choices'
+			});
+		</code>
+	</div>
+	<div class="cont_50">
+		<h3>Setting: "class_dropdown_wrapper"</h3>
+		<p>
+			Sets the css class to be used in the dropdown wrapper element.
+		</p>
+		<p>
+			Default is <span class="code">dropdown_wrapper</span>
+		</p>
+		<code>
+			$('select').dropp({
+				'class_dropdown_wrapper' : 'my_custom_dropdown_wrapper'
+			});
+		</code>
+	</div>
+	<div class="clear">&nbsp;</div>
+	<div class="cont_50">
+		<h3>Setting: "class_dropdown_list"</h3>
+		<p>
+			Sets the css class to be used in the dropdown list wrapper element.
+		</p>
+		<p>
+			Default is <span class="code">dropdown_list</span>
+		</p>
+		<code>
+			$('select').dropp({
+				'class_dropdown_list' : 'my_custom_dropdown_list'
+			});
+		</code>
+	</div>
+	<div class="cont_50">
+		<h3>Setting: "class_visible_dropdown"</h3>
+		<p>
+			Sets the css class to be used in the dropdowns clickable element.
+		</p>
+		<p>
+			 Default is <span class="code">dropdown</span>
+		</p>
+		<code>
+			$('select').dropp({
+				'class_visible_dropdown' : 'my_custom_dropdown'
+			});
+		</code>
+	</div>
+	<div class="clear">&nbsp;</div>
+	<div class="cont_50">
+		<h3>Setting: "class_option_selected"</h3>
+		<p>
+			Sets the css class to be added to an item when it is selected.
+		</p>
+		<p>
+			Default is <span class="code">selected</span>
+		</p>
+		<code>
+			$('select').dropp({
+				'class_option_selected' : 'my_custom_dropdown_item_selected'
+			});
+		</code>
+	</div>
+	<div class="clear">&nbsp;</div>
+	<div class="cont_100">
+		<h2>Examples</h2>
+	</div>
+	<div class="cont_50">
+		<h3>Example 1 (Single Choice Select)</h3>
+		<select name="" id="example_1">
 			<option value="">Please Select a value</option>
 			<option value="">Option 1 - 1</option>
 			<option value="">Option 1 - 2</option>
@@ -49,7 +141,18 @@
 		</select>
 	</div>
 	<div class="cont_50">
-		<select name="" id="" multiple placeholder="Enter Your Placeholder here">
+		<h3>Example 2 (Multiple Choice Select)</h3>
+		<select name="" id="example_2" multiple placeholder="Enter Your Placeholder here">
+			<option value="">Please Select a value</option>
+			<option value="">Option 2 - 1</option>
+			<option value="">Option 2 - 2</option>
+			<option value="">Option 2 - 3</option>
+		</select>
+	</div>
+	<div class="clear">&nbsp;</div>
+	<div class="cont_50">
+		<h3>Example 3 (Multiple Choice Select with "Phrase on Multiple" enabled)</h3>
+		<select name="" id="example_3" multiple placeholder="Enter Your Placeholder here">
 			<option value="">Please Select a value</option>
 			<option value="">Option 2 - 1</option>
 			<option value="">Option 2 - 2</option>
@@ -58,7 +161,11 @@
 	</div>
 	
 	<script type="text/javascript">
-		$('select').dropp();
+		$('#example_1, #example_2').dropp();
+		
+		$('#example_3').dropp({
+			'phrase_on_multiple' : 'Multiple items selected'
+		});
 	</script>
 	
 </body>

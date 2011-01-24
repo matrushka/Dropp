@@ -7,42 +7,57 @@
  *
  * 2010 - Baris Gumustas
  */
-(function($){
-	$.fn.dropp = function() {
-		return this.each(function() {
-			var select = $(this);
-			select.hide();
-			select.wrap('<div class="dropdown_wrapper"></div>');
+(function ($) {
+	$.fn.dropp = function (user_settings) {
+		var settings = {
+			'phrase_on_multiple': false,
+			'class_dropdown_wrapper' : 'dropdown_wrapper',
+			'class_dropdown_list': 'dropdown_list',
+			'class_visible_dropdown': 'dropdown',
+			'class_option_selected': 'selected'
+		};
+		if (user_settings) {
+			$.extend(settings, user_settings);
+		}
+		return this.each(function () {
+			var select, dropdown, list;
 			
-			var dropdown = $('<a href="#"/>').attr('class', select.attr('class')).addClass('dropdown').appendTo(select.parent());
-			var list = $('<ul/>').addClass('dropdown_list').hide().appendTo(select.parent());
+			select = $(this);
+			select.hide();
+			select.wrap('<div class="' + settings.class_dropdown_wrapper + '"></div>');
+			
+			dropdown = $('<a href="#"/>').attr('class', select.attr('class')).addClass(settings.class_visible_dropdown).appendTo(select.parent());
+			list = $('<ul/>').addClass(settings.class_dropdown_list).addClass('dropp_dropdown_list').hide().appendTo(select.parent());
 			
 			// duplicate this line for dropdown opening
-			list.css('min-width', dropdown.width()+parseInt(dropdown.css("padding-left"), 10)+parseInt(dropdown.css("padding-right"), 10));
+			list.css('min-width', dropdown.width() + parseInt(dropdown.css("padding-left"), 10) + parseInt(dropdown.css("padding-right"), 10));
 			list.css('position', 'absolute').css('z-index', '9999');
 			
-			select.find('option').each(function() {
-				var item = $(this);
-				var list = item.closest('.dropdown_wrapper').find('ul.dropdown_list');
-				var list_item = $('<li/>').appendTo(list);
-				var link = $('<a href="#"/>').text(item.text());
-				link.data('option',item);
-				list_item.append(link);
-				item.data('replacement',link);
+			select.find('option').each(function () {
+				var item, list, list_item, link;
+				item = $(this);
+				list = item.closest('.' + settings.class_dropdown_wrapper).find('ul.dropp_dropdown_list');
+				list_item = $('<li/>').appendTo(list);
+				link = $('<a href="#"/>').text(item.text());
 				
-				if (typeof select.attr('multiple') !== undefined && (select.attr('multiple') === true || select.attr('multiple') == 'multiple')) {
-					if (typeof item.attr('selected') !== undefined && (item.attr('selected') === true || item.attr('selected') == 'selected')) {
-						link.addClass('selected');
+				link.data('option', item);
+				list_item.append(link);
+				item.data('replacement', link);
+				
+				if (typeof select.attr('multiple') !== undefined && (select.attr('multiple') === true || select.attr('multiple') === 'multiple')) {
+					if (typeof item.attr('selected') !== undefined && (item.attr('selected') === true || item.attr('selected') === 'selected')) {
+						link.addClass(settings.class_option_selected);
 					}
 				}
 				
 				// Select Event Listener
-				link.bind('select',function(event,trigger_drowndown){
-					var link = $(this);
-					var wrapper = link.closest('.dropdown_wrapper');
-					var item = link.data('option');
-					var select = wrapper.find('select');
-					var dropdown = wrapper.find('.dropdown');
+				link.bind('select', function (event, trigger_drowndown) {
+					var link, wrapper, item, select, dropdown, values;
+					link = $(this);
+					wrapper = link.closest('.' + settings.class_dropdown_wrapper);
+					item = link.data('option');
+					select = wrapper.find('select');
+					dropdown = wrapper.find('.' + settings.class_visible_dropdown);
 					
 					if (typeof select.attr('multiple') === 'undefined' || select.attr('multiple') === false) {
 						select.find('option:selected').removeAttr('selected');
@@ -51,15 +66,15 @@
 						list.hide();
 					} else {
 						if (typeof item.attr('selected') === 'undefined' || item.attr('selected') === false) {
-							item.attr('selected','selected');
-							link.addClass('selected');
+							item.attr('selected', 'selected');
+							link.addClass(settings.class_option_selected);
 						} else {
 							item.removeAttr('selected');
-							link.removeClass('selected');
+							link.removeClass(settings.class_option_selected);
 						}
 						
-						var values = [];
-						select.find('option:selected').each(function(){
+						values = [];
+						select.find('option:selected').each(function () {
 							values.push($(this).text());
 						});
 						
@@ -70,17 +85,21 @@
 								dropdown.html('&nbsp;');
 							}
 						} else {
-							dropdown.text(values.join(', '));
+							if (values.length > 1 && settings.phrase_on_multiple) {
+								dropdown.text(settings.phrase_on_multiple);
+							} else {
+								dropdown.text(values.join(', '));
+							}
 						}
 					}
 
-					if(trigger_drowndown) {
+					if (trigger_drowndown) {
 						select.trigger('change');
 					}
 				});
 				// Click Event
-				link.click(function() {
-					$(this).trigger('select',[true]);
+				link.click(function () {
+					$(this).trigger('select', [true]);
 					return false;
 				});
 			});
@@ -93,9 +112,9 @@
 					dropdown.html('&nbsp;');
 				}
 			} else {
-				if (typeof select.attr('multiple') !== undefined && (select.attr('multiple') === true || select.attr('multiple') == 'multiple')) {
-					var values = [];
-					select.find('option:selected').each(function(){
+				if (typeof select.attr('multiple') !== undefined && (select.attr('multiple') === true || select.attr('multiple') === 'multiple')) {
+					values = [];
+					select.find('option:selected').each(function () {
 						values.push($(this).text());
 					});
 					dropdown.html(values.join(', '));
@@ -104,22 +123,22 @@
 				}
 			}
 			
-			dropdown.click(function() {
+			dropdown.click(function () {
 				if (list.is(':visible')) {
 						list.hide();
-						$('ul.dropdown_list').hide();
+						$('ul.dropp_dropdown_list').hide();
 				} else {
-					$('ul.dropdown_list').hide();
+					$('ul.dropp_dropdown_list').hide();
 						list.show();
 				}
 				return false;
 			});
 			
-			$(document).click(function() {
+			$(document).click(function () {
 					list.hide();
 			});
 			
-			$('.dropdown_wrapper').click(function(event) {
+			$('.' + settings.class_dropdown_wrapper).click(function (event) {
 					event.stopPropagation();
 			});
 		});
