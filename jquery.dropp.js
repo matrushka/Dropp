@@ -25,9 +25,9 @@
 			
 			select = $(this);
 			select.hide();
-			select.wrap('<div class="' + settings.class_dropdown_wrapper + '"></div>');
+			select.wrap('<div></div>').parent().attr('class', select.attr('class')).addClass(settings.class_dropdown_wrapper);
 			
-			dropdown = $('<a href="#"/>').attr('class', select.attr('class')).addClass(settings.class_visible_dropdown).appendTo(select.parent());
+			dropdown = $('<a href="#"/>').addClass(settings.class_visible_dropdown).appendTo(select.parent());
 			list = $('<ul/>').addClass(settings.class_dropdown_list).addClass('dropp_dropdown_list').hide().appendTo(select.parent());
 			
 			// duplicate this line for dropdown opening
