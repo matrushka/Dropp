@@ -20,7 +20,7 @@
 			$.extend(settings, user_settings);
 		}
 		return this.each(function () {
-			var select, dropdown, list;
+			var select, dropdown, list, values;
 			
 			select = $(this);
 			select.hide();
@@ -125,21 +125,21 @@
 			
 			dropdown.click(function () {
 				if (list.is(':visible')) {
-						list.hide();
-						$('ul.dropp_dropdown_list').hide();
+					list.hide();
+					$('ul.dropp_dropdown_list').hide();
 				} else {
 					$('ul.dropp_dropdown_list').hide();
-						list.show();
+					list.show();
 				}
 				return false;
 			});
 			
 			$(document).click(function () {
-					list.hide();
+				list.hide();
 			});
 			
 			$('.' + settings.class_dropdown_wrapper).click(function (event) {
-					event.stopPropagation();
+				event.stopPropagation();
 			});
 		});
 	};

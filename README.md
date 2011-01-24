@@ -8,3 +8,5 @@ All you have to do is to initialize the replacer as shown below.
 	$('select').dropp();
 	
 It'll handle the rest!
+
+See the index.html for further info.
