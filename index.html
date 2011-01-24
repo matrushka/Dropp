@@ -128,16 +128,16 @@
 		</code>
 	</div>
 	<div class="cont_50">
-		<h3>Setting: "substract_border_width"</h3>
+		<h3>Setting: "include_border_width"</h3>
 		<p>
-			Determines if the border width of the dropdown element will be substracted from list width.
+			Determines if the border width of the dropdown element will be included in list width.
 		</p>
 		<p>
 			Default is <span class="code">false</span>
 		</p>
 		<code>
 			$('select').dropp({
-				'substract_border_width' : true
+				'include_border_width' : true
 			});
 		</code>
 	</div>
@@ -178,7 +178,8 @@
 		$('#example_1, #example_2').dropp();
 		
 		$('#example_3').dropp({
-			'phrase_on_multiple' : 'Multiple items selected'
+			'phrase_on_multiple' : 'Multiple items selected',
+			'include_border_width' : true
 		});
 	</script>
 	

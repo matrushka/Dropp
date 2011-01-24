@@ -15,7 +15,7 @@
 			'class_dropdown_list'     : 'dropdown_list',
 			'class_visible_dropdown'  : 'dropdown',
 			'class_option_selected'   : 'selected',
-			'substract_border_width'  : false
+			'include_border_width'    : false
 		};
 		if (user_settings) {
 			$.extend(settings, user_settings);
@@ -32,8 +32,8 @@
 			
 			// duplicate this line for dropdown opening
 			list_width = dropdown.width() + parseInt(dropdown.css("padding-left"), 10) + parseInt(dropdown.css("padding-right"), 10);
-			if (settings.substract_border_width) {
-				list_width -= (parseInt(list.css('borderLeftWidth'), 10) + parseInt(list.css('borderRightWidth'), 10));
+			if (settings.include_border_width) {
+				list_width += (parseInt(list.css('borderLeftWidth'), 10) + parseInt(list.css('borderRightWidth'), 10));
 			}
 			
 			list.css('min-width', list_width);
