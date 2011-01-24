@@ -10,12 +10,12 @@
 (function ($) {
 	$.fn.dropp = function (user_settings) {
 		var settings = {
-			'phrase_on_multiple'      : false,
-			'class_dropdown_wrapper'  : 'dropdown_wrapper',
-			'class_dropdown_list'     : 'dropdown_list',
-			'class_visible_dropdown'  : 'dropdown',
-			'class_option_selected'   : 'selected',
-			'include_border_width'    : false
+			'phrase_on_multiple'          : false,
+			'class_dropdown_wrapper'      : 'dropdown_wrapper',
+			'class_dropdown_list'         : 'dropdown_list',
+			'class_visible_dropdown'      : 'dropdown',
+			'class_option_selected'       : 'selected',
+			'substract_list_border_width' : true
 		};
 		if (user_settings) {
 			$.extend(settings, user_settings);
@@ -31,9 +31,10 @@
 			list = $('<ul/>').addClass(settings.class_dropdown_list).addClass('dropp_dropdown_list').hide().appendTo(select.parent());
 			
 			// duplicate this line for dropdown opening
-			list_width = dropdown.width() + parseInt(dropdown.css("padding-left"), 10) + parseInt(dropdown.css("padding-right"), 10);
-			if (settings.include_border_width) {
-				list_width += (parseInt(list.css('borderLeftWidth'), 10) + parseInt(list.css('borderRightWidth'), 10));
+			list_width = dropdown.get(0).offsetWidth;
+			
+			if (settings.substract_list_border_width) {
+				list_width -= (parseInt(list.css('borderLeftWidth'), 10) + parseInt(list.css('borderRightWidth'), 10));
 			}
 			
 			list.css('min-width', list_width);
