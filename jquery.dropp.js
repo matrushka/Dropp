@@ -21,7 +21,8 @@
 			$.extend(settings, user_settings);
 		}
 		return this.each(function () {
-			var select, dropdown, list, values, list_width;
+			var select, dropdown, list, values, list_width, widest_element;
+			widest_element = null;
 			
 			select = $(this);
 			select.hide();
@@ -38,6 +39,7 @@
 			}
 			
 			list.css('min-width', list_width);
+			
 			list.css('position', 'absolute').css('z-index', '9999');
 			
 			select.find('option').each(function () {
@@ -110,6 +112,23 @@
 					return false;
 				});
 			});
+			
+
+			// Check for IE and apply a hack here for min-width problems
+			if ($.browser.msie && $.browser.version === '6.0') {
+				// Look for the widest option
+				list.find('a').each(function(){
+					if (widest_element === null || widest_element.width() < $(this).width()) {
+						widest_element = $(this);
+					}
+				});
+				if (widest_element.width() > list_width) {
+					list.width(widest_element.width());
+				} else {
+					list.width(list_width);
+				}
+				
+			}
 			
 			// Each loop ends here
 			if (select.find('option:selected').length === 0) {
