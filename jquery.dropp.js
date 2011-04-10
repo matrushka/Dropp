@@ -24,8 +24,8 @@
 		}
 		
 		$(document).click(function () {
-			$('ul.'+settings.class_dropdown_list).hide();
-			$('.'+settings.class_visible_dropdown).removeClass(settings.class_active_dropdown);
+			$('ul.' + settings.class_dropdown_list).hide();
+			$('.' + settings.class_visible_dropdown).removeClass(settings.class_active_dropdown);
 		});
 
 		$('.' + settings.class_dropdown_wrapper).live('click', function (event) {
@@ -42,7 +42,7 @@
 
 			dropdown = $('<a href="#"/>').addClass(settings.class_visible_dropdown).appendTo(select.parent());
 			list = $('<ul/>').addClass(settings.class_dropdown_list).addClass('dropp_dropdown_list').hide().appendTo(select.parent());
-			wrapper = list.closest('.'+settings.class_dropdown_wrapper);
+			wrapper = list.closest('.' + settings.class_dropdown_wrapper);
 			
 			// duplicate this line for dropdown opening
 			list_width = dropdown.get(0).offsetWidth;
@@ -130,7 +130,7 @@
 			// Check for IE and apply a hack here for min-width problems
 			if ($.browser.msie && $.browser.version === '6.0') {
 				// Look for the widest option
-				list.find('a').each(function(){
+				list.find('a').each(function () {
 					if (widest_element === null || widest_element.width() < $(this).width()) {
 						widest_element = $(this);
 					}
