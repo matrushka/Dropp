@@ -15,21 +15,34 @@
 			'class_dropdown_list'         : 'dropdown_list',
 			'class_visible_dropdown'      : 'dropdown',
 			'class_option_selected'       : 'selected',
+			'class_active_dropdown'       : 'active',
 			'substract_list_border_width' : true
 		};
+		
 		if (user_settings) {
 			$.extend(settings, user_settings);
 		}
+		
+		$(document).click(function () {
+			$('ul.'+settings.class_dropdown_list).hide();
+			$('.'+settings.class_visible_dropdown).removeClass(settings.class_active_dropdown);
+		});
+
+		$('.' + settings.class_dropdown_wrapper).live('click', function (event) {
+			event.stopPropagation();
+		});
+		
 		return this.each(function () {
-			var select, dropdown, list, values, list_width, widest_element;
+			var select, dropdown, list, values, list_width, widest_element, wrapper;
 			widest_element = null;
 			
 			select = $(this);
 			select.hide();
 			select.wrap('<div></div>').parent().attr('class', select.attr('class')).addClass(settings.class_dropdown_wrapper);
-			
+
 			dropdown = $('<a href="#"/>').addClass(settings.class_visible_dropdown).appendTo(select.parent());
 			list = $('<ul/>').addClass(settings.class_dropdown_list).addClass('dropp_dropdown_list').hide().appendTo(select.parent());
+			wrapper = list.closest('.'+settings.class_dropdown_wrapper);
 			
 			// duplicate this line for dropdown opening
 			list_width = dropdown.get(0).offsetWidth;
@@ -61,9 +74,8 @@
 				
 				// Select Event Listener
 				link.bind('select', function (event, trigger_drowndown) {
-					var link, wrapper, item, select, dropdown, values;
+					var link, item, select, dropdown, values;
 					link = $(this);
-					wrapper = link.closest('.' + settings.class_dropdown_wrapper);
 					item = link.data('option');
 					select = wrapper.find('select');
 					dropdown = wrapper.find('.' + settings.class_visible_dropdown);
@@ -73,6 +85,7 @@
 						dropdown.text($(this).text());
 						item.attr('selected', 'selected');
 						list.hide();
+						dropdown.removeClass(settings.class_active_dropdown);
 					} else {
 						if (typeof item.attr('selected') === 'undefined' || item.attr('selected') === false) {
 							item.attr('selected', 'selected');
@@ -152,21 +165,16 @@
 			dropdown.click(function () {
 				if (list.is(':visible')) {
 					list.hide();
+					dropdown.removeClass(settings.class_active_dropdown);
 					$('ul.dropp_dropdown_list').hide();
 				} else {
 					$('ul.dropp_dropdown_list').hide();
 					list.show();
+					dropdown.addClass(settings.class_active_dropdown);
 				}
 				return false;
 			});
-			
-			$(document).click(function () {
-				list.hide();
-			});
-			
-			$('.' + settings.class_dropdown_wrapper).click(function (event) {
-				event.stopPropagation();
-			});
 		});
+		
 	};
 }(jQuery));
