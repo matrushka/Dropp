@@ -40,7 +40,7 @@
 			select.hide();
 			select.wrap('<div></div>');
 			select_class = select.attr('class');
-			if ( typeof(select_class) === 'undefined' ) {
+			if (typeof (select_class) === 'undefined') {
 				select_class = null;
 			}
 			select.parent().attr('class', select_class).addClass(settings.class_dropdown_wrapper);
