@@ -33,12 +33,17 @@
 		});
 		
 		return this.each(function () {
-			var select, dropdown, list, values, list_width, widest_element, wrapper;
+			var select, dropdown, list, values, list_width, widest_element, wrapper, select_class;
 			widest_element = null;
 			
 			select = $(this);
 			select.hide();
-			select.wrap('<div></div>').parent().attr('class', select.attr('class')).addClass(settings.class_dropdown_wrapper);
+			select.wrap('<div></div>');
+			select_class = select.attr('class');
+			if ( typeof(select_class) === 'undefined' ) {
+				select_class = null;
+			}
+			select.parent().attr('class', select_class).addClass(settings.class_dropdown_wrapper);
 
 			dropdown = $('<a href="#"/>').addClass(settings.class_visible_dropdown).appendTo(select.parent());
 			list = $('<ul/>').addClass(settings.class_dropdown_list).addClass('dropp_dropdown_list').hide().appendTo(select.parent());
