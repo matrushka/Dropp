@@ -8,6 +8,43 @@
  * 2010 - Baris Gumustas
  */
 (function ($) {
+	// variables for key caches
+	window.dropp_key_cache = {};
+	window.dropp_key_cache.cache = '';
+	window.dropp_key_cache.timeout = null;
+	
+	function clearDropDowns() {
+		var visible_list, visible_list_data;
+		visible_list = $('.dropp ul:visible');
+		if (visible_list.length > 0) {
+			visible_list.hide();
+			visible_list_data = visible_list.closest('.dropp').data('dropp');
+			if (typeof visible_list_data !== 'undefined') {
+				visible_list.removeClass(visible_list_data.settings.class_active_dropdown);
+			}
+		}
+	}
+	
+	$('.dropp').live('click', function (event) {
+		event.stopPropagation();
+	});
+	
+	$('.dropp ul li a').live('mouseover', function () {
+		$(this).closest('ul').find('a').removeClass('hover');
+		$(this).addClass('hover');
+	});
+		
+	$(document).bind('keypress', function (event) {
+		if (event.keyCode === 27) {
+			event.preventDefault();
+			clearDropDowns();
+		}
+	});
+	
+	$(document).click(function () {
+		clearDropDowns();
+	});
+	
 	$.fn.dropp = function (user_settings) {
 		var settings = {
 			'phrase_on_multiple'          : false,
@@ -16,41 +53,39 @@
 			'class_visible_dropdown'      : 'dropdown',
 			'class_option_selected'       : 'selected',
 			'class_active_dropdown'       : 'active',
-			'substract_list_border_width' : true
+			'substract_list_border_width' : true,
+			'keyboard_support'            : true
 		};
 		
 		if (user_settings) {
 			$.extend(settings, user_settings);
 		}
 		
-		$(document).click(function () {
-			$('ul.' + settings.class_dropdown_list).hide();
-			$('.' + settings.class_visible_dropdown).removeClass(settings.class_active_dropdown);
-		});
-
-		$('.' + settings.class_dropdown_wrapper).live('click', function (event) {
-			event.stopPropagation();
-		});
-		
 		return this.each(function () {
-			var select, dropdown, list, values, list_width, widest_element, wrapper, select_class;
+			// Start of loop
+			var select, dropdown, list, values, list_width, widest_element, wrapper, select_class, list_of_contents;
+			list_of_contents = [];
 			widest_element = null;
 			
 			select = $(this);
+			// Write settings to data to read later for global events
+			select.data('dropp', {
+				settings: settings
+			});
 			select.hide();
 			select.wrap('<div></div>');
 			select_class = select.attr('class');
 			if (typeof (select_class) === 'undefined') {
 				select_class = null;
 			}
-			select.parent().attr('class', select_class).addClass(settings.class_dropdown_wrapper);
+			select.parent().attr('class', select_class).addClass(settings.class_dropdown_wrapper).addClass('dropp');
 
 			dropdown = $('<a href="#"/>').addClass(settings.class_visible_dropdown).appendTo(select.parent());
 			list = $('<ul/>').addClass(settings.class_dropdown_list).addClass('dropp_dropdown_list').hide().appendTo(select.parent());
 			wrapper = list.closest('.' + settings.class_dropdown_wrapper);
 			
 			// duplicate this line for dropdown opening
-			list_width = dropdown.get(0).offsetWidth;
+			list_width = dropdown.outerWidth();
 			
 			if (settings.substract_list_border_width) {
 				list_width -= (parseInt(list.css('borderLeftWidth'), 10) + parseInt(list.css('borderRightWidth'), 10));
@@ -63,6 +98,7 @@
 			select.find('option').each(function () {
 				var item, list, list_item, link;
 				item = $(this);
+				list_of_contents.push(item.text().toLowerCase());
 				list = item.closest('.' + settings.class_dropdown_wrapper).find('ul.dropp_dropdown_list');
 				list_item = $('<li/>').appendTo(list);
 				link = $('<a href="#"/>').text(item.text());
@@ -79,6 +115,7 @@
 				
 				// Select Event Listener
 				link.bind('select', function (event, trigger_drowndown) {
+					event.preventDefault();
 					var link, item, select, dropdown, values;
 					link = $(this);
 					item = link.data('option');
@@ -130,7 +167,69 @@
 					return false;
 				});
 			});
-			
+			if (settings.keyboard_support) {
+				dropdown.bind('keypress', function (event) {
+					var is_scrollable, character, found_index, cursor_pattern, found_item, option_index;
+					event.preventDefault();
+					clearTimeout(window.dropp_key_cache.timeout);
+					switch (event.keyCode) {
+					case 38:
+						// up
+						found_item = list.find('a.hover').closest('li').prev('li');
+						if (found_item.length > 0) {
+							list.find('a.hover').removeClass('hover');
+							found_item.find('a').addClass('hover');
+							found_item.closest('ul').get(0).scrollTop = found_item.closest('li').get(0).offsetTop;
+						}
+						break;
+					case 40:
+						// down
+						found_item = list.find('a.hover').closest('li').next('li');
+						if (found_item.length === 0 && list.find('a.hover').length === 0) {
+							found_item = list.find('li:eq(0)');
+						}
+						if (found_item.length > 0) {
+							list.find('a.hover').removeClass('hover');
+							found_item.find('a').addClass('hover');
+							found_item.closest('ul').get(0).scrollTop = found_item.closest('li').get(0).offsetTop;
+						}
+						break;
+					case 13:
+						// select
+						list.find('a.hover').trigger('select');
+						break;
+					default:
+						character = String.fromCharCode(event.which);
+						window.dropp_key_cache.cache += character;
+
+						found_index = null;
+						for (option_index = 0; option_index < list_of_contents.length; option_index += 1) {
+							cursor_pattern = new RegExp(window.dropp_key_cache.cache.toLowerCase());
+							if (cursor_pattern.test(list_of_contents[option_index])) {
+								found_index = option_index;
+								break;
+							}
+						}
+
+						if (found_index !== null) {
+							found_item = list.find('li:eq(' + found_index.toString() + ') a');
+							is_scrollable = list.get(0).scrollHeight > list.height();
+							if (is_scrollable) {
+								found_item.closest('ul').get(0).scrollTop = found_item.closest('li').get(0).offsetTop;
+							}
+
+							list.find('li a.hover').removeClass('hover');
+							found_item.addClass('hover');
+						}
+						break;
+					}
+				
+					window.dropp_key_cache.timeout = setTimeout(function () {
+						window.dropp_key_cache.cache = '';
+					}, 400);
+					return false;
+				});
+			}
 
 			// Check for IE and apply a hack here for min-width problems
 			if ($.browser.msie && $.browser.version === '6.0') {
@@ -176,10 +275,11 @@
 					$('ul.dropp_dropdown_list').hide();
 					list.show();
 					dropdown.addClass(settings.class_active_dropdown);
+					// manage keyboard here
 				}
 				return false;
 			});
+			// end of loop
 		});
-		
 	};
 }(jQuery));

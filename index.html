@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<title>TEST</title>
+	<title>Dropp - jQuery Dropdown Replacement</title>
 	<link href='http://fonts.googleapis.com/css?family=Raleway:100' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="reset.css" media="all">
@@ -26,7 +26,7 @@
 </head>
 <body>
 	<div class="cont_100">
-		<h1>jQuery Dropdown Replacement</h1>
+		<h1>Dropp - jQuery Dropdown Replacement</h1>
 	</div>
 	<div class="cont_100">
 		<h2>Introduction</h2>
@@ -81,6 +81,21 @@
 			<option value="">Option 4 - 1</option>
 			<option value="">Option 4 - 2</option>
 			<option value="">Option 4 - 3</option>
+		</select>
+	</div>
+	<div class="clear">&nbsp;</div>
+	<div class="cont_50">
+		<h3>Example 5 (Scroll and Keyboard Support)</h3>
+		<select name="" id="example_5" placeholder="Enter Your Placeholder here" class="scroll-demo">
+			<option value="">AA</option>
+			<option value="">AB</option>
+			<option value="">AC</option>
+			<option value="">BA</option>
+			<option value="">BB</option>
+			<option value="">BC</option>
+			<option value="">CA</option>
+			<option value="">CB</option>
+			<option value="">CC</option>
 		</select>
 	</div>
 	<div class="clear">&nbsp;</div>
@@ -196,6 +211,20 @@
 			});
 		</code>
 	</div>
+	<div class="cont_50">
+		<h3>Setting: "keyboard_support"</h3>
+		<p>
+			Enables the keyboard support.
+		</p>
+		<p>
+			Default is <span class="code">true</span>
+		</p>
+		<code>
+			$('select').dropp({
+				'keyboard_support' : false
+			});
+		</code>
+	</div>
 	<div class="clear">&nbsp;</div>
 	<script type="text/javascript">
 		$('#example_1, #example_2, #example_4').dropp();
@@ -203,6 +232,8 @@
 		$('#example_3').dropp({
 			'phrase_on_multiple' : 'Multiple items selected'
 		});
+		
+		$('#example_5').dropp();
 	</script>
 	
 </body>
