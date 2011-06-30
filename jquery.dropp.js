@@ -84,15 +84,6 @@
 			list = $('<ul/>').addClass(settings.class_dropdown_list).addClass('dropp_dropdown_list').hide().appendTo(select.parent());
 			wrapper = list.closest('.' + settings.class_dropdown_wrapper);
 			
-			// duplicate this line for dropdown opening
-			list_width = dropdown.outerWidth();
-			
-			if (settings.substract_list_border_width) {
-				list_width -= (parseInt(list.css('borderLeftWidth'), 10) + parseInt(list.css('borderRightWidth'), 10));
-			}
-			
-			list.css('min-width', list_width);
-			
 			list.css('position', 'absolute').css('z-index', '9999');
 			
 			select.find('option').each(function () {
@@ -230,22 +221,6 @@
 					return false;
 				});
 			}
-
-			// Check for IE and apply a hack here for min-width problems
-			if ($.browser.msie && $.browser.version === '6.0') {
-				// Look for the widest option
-				list.find('a').each(function () {
-					if (widest_element === null || widest_element.width() < $(this).width()) {
-						widest_element = $(this);
-					}
-				});
-				if (widest_element.width() > list_width) {
-					list.width(widest_element.width());
-				} else {
-					list.width(list_width);
-				}
-				
-			}
 			
 			// Each loop ends here
 			if (select.find('option:selected').length === 0) {
@@ -267,6 +242,7 @@
 			}
 			
 			dropdown.click(function () {
+				var list_data;
 				if (list.is(':visible')) {
 					list.hide();
 					dropdown.removeClass(settings.class_active_dropdown);
@@ -275,7 +251,38 @@
 					$('ul.dropp_dropdown_list').hide();
 					list.show();
 					dropdown.addClass(settings.class_active_dropdown);
-					// manage keyboard here
+					
+					// manage dropdown width
+					// check the cached width
+					list_data = select.data('dropp');
+					if (list_data.cached_width !== dropdown.outerWidth() ) {
+						list_width = dropdown.outerWidth();
+						if (settings.substract_list_border_width) {
+							list_width -= (parseInt(list.css('borderLeftWidth'), 10) + parseInt(list.css('borderRightWidth'), 10));
+						}
+						list.css('min-width', list_width);
+
+						// Check for IE and apply a hack here for min-width problems
+						if ($.browser.msie && $.browser.version === '6.0') {
+							// Look for the widest option
+							list.find('a').each(function () {
+								if (widest_element === null || widest_element.width() < $(this).width()) {
+									widest_element = $(this);
+								}
+							});
+							if (widest_element.width() > list_width) {
+								list.width(widest_element.width());
+							} else {
+								list.width(list_width);
+							}
+						}
+						
+						// write cached width
+						list_data.cached_width = dropdown.outerWidth();
+						list.data('dropp', list_data);
+					}
+					
+
 				}
 				return false;
 			});
